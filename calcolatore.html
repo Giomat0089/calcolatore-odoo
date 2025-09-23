@@ -27,6 +27,7 @@
     .sidebar h2{margin:0 0 12px;color:var(--accent-2)}
     .sidebar p{margin:6px 0}
     .btn{display:block;width:100%;padding:12px;margin-top:16px;background:var(--accent);color:#000;font-weight:bold;text-align:center;border-radius:8px;text-decoration:none}
+    button{background:var(--accent);border:none;color:#000;font-weight:bold;padding:6px 12px;margin:4px;cursor:pointer;border-radius:6px}
   </style>
 </head>
 <body>
@@ -36,35 +37,58 @@
       <!-- Griglia App -->
       <div class="grid" id="apps">
         <div class="card" data-name="Asana" data-price="20">
-          <svg fill="#fff"><circle cx="20" cy="20" r="18"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">
+            <circle cx="20" cy="12" r="6" fill="#ff6666"/>
+            <circle cx="10" cy="28" r="6" fill="#ff6666"/>
+            <circle cx="30" cy="28" r="6" fill="#ff6666"/>
+          </svg>
           <span>Progetti</span>
         </div>
         <div class="card" data-name="Quickbooks" data-price="76">
-          <svg fill="#0f0"><rect x="5" y="5" width="30" height="30"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">
+            <rect x="5" y="5" width="30" height="30" rx="6" fill="#00cc44"/>
+          </svg>
           <span>Contabilità</span>
         </div>
         <div class="card" data-name="Shopify" data-price="79">
-          <svg fill="#0c6"><polygon points="5,35 35,35 20,5"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">
+            <polygon points="20,5 35,35 5,35" fill="#0c6"/>
+          </svg>
           <span>E-commerce</span>
         </div>
-        <div class="card" data-name="Notion" data-price="14">
-          <svg stroke="#fff" fill="none"><rect x="5" y="5" width="30" height="30"/></svg>
-          <span>Knowledge</span>
-        </div>
         <div class="card" data-name="Salesforce" data-price="165">
-          <svg fill="#09f"><circle cx="20" cy="20" r="18"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">
+            <circle cx="20" cy="20" r="15" fill="#00aaff"/>
+          </svg>
           <span>CRM</span>
         </div>
         <div class="card" data-name="Slack" data-price="14.1">
-          <svg fill="#f0f"><circle cx="20" cy="20" r="5"/><circle cx="30" cy="10" r="5"/><circle cx="10" cy="30" r="5"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">
+            <rect x="8" y="8" width="8" height="24" fill="#e01e5a"/>
+            <rect x="16" y="8" width="8" height="8" fill="#36c5f0"/>
+            <rect x="24" y="8" width="8" height="24" fill="#2eb67d"/>
+            <rect x="16" y="24" width="8" height="8" fill="#ecb22e"/>
+          </svg>
           <span>Comunicazioni</span>
         </div>
+        <div class="card" data-name="Notion" data-price="14">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">
+            <rect x="6" y="6" width="28" height="28" fill="#fff" stroke="#000"/>
+            <text x="13" y="27" font-size="14" fill="#000" font-family="Arial">N</text>
+          </svg>
+          <span>Knowledge</span>
+        </div>
         <div class="card" data-name="DocuSign" data-price="38">
-          <svg fill="#ff0"><rect x="10" y="10" width="20" height="20"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">
+            <rect x="6" y="10" width="28" height="20" rx="2" fill="#ffcc00"/>
+          </svg>
           <span>Firma</span>
         </div>
         <div class="card" data-name="WordPress" data-price="25">
-          <svg stroke="#fff" fill="none"><circle cx="20" cy="20" r="18"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">
+            <circle cx="20" cy="20" r="18" fill="#21759b"/>
+            <text x="12" y="25" font-size="12" fill="#fff" font-family="Arial">WP</text>
+          </svg>
           <span>Sito web</span>
         </div>
       </div>
@@ -89,18 +113,11 @@ const summary = document.getElementById('summary');
 const saving = document.getElementById('saving');
 const usersEl = document.getElementById('users');
 
-let selected = [];
 let users = 1;
 
 apps.forEach(app=>{
   app.addEventListener('click',()=>{
     app.classList.toggle('active');
-    const name=app.dataset.name;
-    if(selected.includes(name)){
-      selected=selected.filter(x=>x!==name);
-    }else{
-      selected.push(name);
-    }
     calc();
   });
 });
