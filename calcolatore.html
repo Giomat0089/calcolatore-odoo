@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Calcolatore Risparmio</title>
+  <style>
+    :root{
+      --bg:#000; --card:#111; --muted:#444; --accent:#00cc44; --accent-2:#ffcc00;
+      --danger:#ff4444; --text:#fff;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,Arial,sans-serif;line-height:1.4;padding:24px}
+    h1{margin:0 0 24px;text-align:center;letter-spacing:.4px}
+    .wrap{max-width:1200px;margin:0 auto}
+    .layout{display:flex;gap:32px;align-items:flex-start}
+    /* GRID */
+    .grid{display:grid;grid-template-columns:repeat(4,minmax(120px,1fr));gap:14px;flex:1}
+    .app{position:relative;background:var(--card);border:2px solid var(--muted);border-radius:14px;padding:14px;cursor:pointer;text-align:center;transition:.2s}
+    .app:hover{transform:translateY(-1px);border-color:#666}
+    .app.selected{border-color:var(--accent);background:#141414}
+    .app .tick{position:absolute;top:8px;right:8px;width:20px;height:20px;border-radius:50%;background:var(--accent);display:none;align-items:center;justify-content:center;font-size:14px;color:#000;font-weight:700}
+    .app.selected .tick{display:flex}
+    .app .ico{width:42px;height:42px;margin:0 auto 10px;display:block}
+    .app span{font-size:13px}
+    /* SIDEBAR */
+    .side{width:340px;background:var(--card);border:1px solid #1f1f1f;border-radius:14px;padding:18px;position:sticky;top:16px}
+    .side h3{margin:0 0 10px;color:var(--accent-2)}
+    .side ul{list-style:none;margin:8px 0 14px;padding:0;max-height:280px;overflow:auto}
+    .side li{font-size:14px;margin:4px 0}
+    .muted{color:#cfcfcf}
+    .danger{color:var(--danger);font-weight:700}
+    .green{color:var(--accent);font-weight:700}
+    .row{display:flex;align-items:center;gap:8px}
+    .counter{margin:10px 0 8px}
+    .btn{appearance:none;border:0;background:var(--accent);color:#000;font-weight:700;border-radius:8px;padding:6px 12px;cursor:pointer}
+    .btn:active{transform:translateY(1px)}
+    .pill{display:inline-block;background:#0f0f0f;border:1px solid #212121;border-radius:999px;padding:6px 10px;margin-top:6px}
+    .cta{display:block;text-align:center;background:var(--accent);color:#000;text-decoration:none;padding:12px;border-radius:10px;margin-top:14px;font-weight:800}
+    /* Responsive */
+    @media (max-width: 980px){
+      .layout{flex-direction:column}
+      .grid{grid-template-columns:repeat(3,minmax(120px,1fr))}
+      .side{width:100%;position:static}
+    }
+    @media (max-width: 640px){ .grid{grid-template-columns:repeat(2,minmax(120px,1fr))} }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>RISPARMIA DENARO E STRESS!</h1>
+    <div class="layout">
+      <div class="grid" id="grid"></div>
+
+      <aside class="side">
+        <h3>Calcolatore</h3>
+
+        <div class="muted">App da sostituire</div>
+        <ul id="list"></ul>
+        <div class="danger">Totale: <span id="totReplace">€ 0,00</span> <span class="muted">/anno</span></div>
+
+        <div class="muted" style="margin-top:14px;">Tutte le app</div>
+        <div class="green" id="totOdoo">€ 0,00 <span class="muted">/anno</span></div>
+
+        <div class="counter">
+          <div class="muted" style="margin:8px 0 6px"><strong>Numero utenti</strong></div>
+          <div class="row">
+            <button class="btn" id="minus">−</button>
+            <div class="pill"><span id="users">1</span> utente</div>
+            <button class="btn" id="plus">+</button>
+          </div>
+        </div>
+
+        <div class="green">Risparmio: <span id="saving">€ 0,00</span> <span class="muted">/anno</span></div>
+
+        <a href="#contatti" class="cta">CONTATTACI</a>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    // ---- CONFIGURAZIONE ----
+    const ODOO_EUR_YEAR_PER_USER = 142.80; // €/utente/anno
+    const conversionRate = 0.93;           // $ -> € per i totali
+
+    // App (prezzi unitari in $/utente come nello screenshot)
+    const apps = [
+      { name:"Progetti",       price:20,   svg:`<circle cx="12" cy="12" r="10" fill="#00cc44"/>` },
+      { name:"Contabilità",    price:78,   svg:`<rect x="2" y="2" width="20" height="20" rx="4" fill="#ff6600"/>` },
+      { name:"E-commerce",     price:79,   svg:`<polygon points="3,6 21,6 19,20 5,20" fill="#3366ff"/>` },
+      { name:"CRM",            price:165,  svg:`<path d="M12 2a10 10 0 1 0 0 20" fill="#ff3366"/>` },
+      { name:"Comunicazioni",  price:14,   svg:`<path d="M4 4h16v12H5.2L4 17.2z" fill="#33cccc"/>` },
+      { name:"Knowledge",      price:10,   svg:`<rect x="4" y="4" width="16" height="16" fill="#9966ff"/>` },
+      { name:"Risorse umane",  price:99,   svg:`<circle cx="12" cy="8" r="4" fill="#cc3333"/><path d="M2 22c1-4 5-6 10-6s9 2 10 6" fill="#cc3333"/>` },
+      { name:"Firma",          price:38,   svg:`<path d="M3 17l6 6L21 7l-6-6z" fill="#ffcc00"/>` },
+      { name:"Magazzino",      price:349,  svg:`<rect x="3" y="3" width="18" height="18" fill="#00cccc"/>` },
+      { name:"Sito web",       price:25,   svg:`<circle cx="12" cy="12" r="10" fill="#ff9900"/>` },
+      { name:"Documenti",      price:12.5, svg:`<rect x="4" y="2" width="16" height="20" fill="#6699ff"/>` },
+      { name:"Punto vendita",  price:120,  svg:`<rect x="4" y="6" width="16" height="12" fill="#cc66ff"/>` },
+      { name:"Note spese",     price:9,    svg:`<rect x="6" y="2" width="12" height="20" fill="#ff3333"/>` },
+      { name:"Appuntamenti",   price:96,   svg:`<rect x="3" y="4" width="18" height="18" fill="#33cc33"/>` },
+      { name:"Acquisti",       price:250,  svg:`<polygon points="3,6 21,6 19,20 5,20" fill="#ff6699"/>` },
+      { name:"Social",         price:249,  svg:`<circle cx="12" cy="12" r="10" fill="#0099cc"/>` },
+      { name:"Pianificazione", price:90,   svg:`<rect x="2" y="6" width="20" height="12" fill="#996600"/>` }
+    ];
+
+    // ---- UTIL ----
+    const € = n => n.toLocaleString('it-IT', {style:'currency', currency:'EUR'});
+    const $ = n => n.toLocaleString('en-US', {style:'currency', currency:'USD'});
+
+    // ---- DOM ----
+    const grid = document.getElementById('grid');
+    const list = document.getElementById('list');
+    const usersEl = document.getElementById('users');
+    const totReplaceEl = document.getElementById('totReplace');
+    const totOdooEl = document.getElementById('totOdoo');
+    const savingEl = document.getElementById('saving');
+
+    let selected = new Set();
+    let users = 1;
+
+    function renderGrid(){
+      apps.forEach((app, i) => {
+        const card = document.createElement('div');
+        card.className = 'app';
+        card.dataset.idx = i;
+        card.innerHTML = `
+          <div class="tick">✓</div>
+          <svg class="ico" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">${app.svg}</svg>
+          <span>${app.name}</span>
+        `;
+        card.addEventListener('click', () => toggle(i, card));
+        grid.appendChild(card);
+      });
+    }
+
+    function toggle(i, el){
+      if (selected.has(i)) { selected.delete(i); el.classList.remove('selected'); }
+      else { selected.add(i); el.classList.add('selected'); }
+      update();
+    }
+
+    function update(){
+      // Lista a destra
+      list.innerHTML = '';
+      let totalUSD = 0;
+      [...selected].forEach(i => {
+        const a = apps[i];
+        totalUSD += a.price * users;
+        const li = document.createElement('li');
+        li.textContent = `${a.name}: ${$(a.price)}/utente`;
+        list.appendChild(li);
+      });
+
+      const totalEUR = totalUSD * conversionRate;
+      totReplaceEl.textContent = €(totalEUR);
+
+      const odoo = ODOO_EUR_YEAR_PER_USER * users;
+      totOdooEl.textContent = €(odoo) + ' /anno';
+
+      const save = totalEUR - odoo;
+      savingEl.textContent = €(save);
+      usersEl.textContent = users;
+    }
+
+    document.getElementById('plus').addEventListener('click', () => { users++; update(); });
+    document.getElementById('minus').addEventListener('click', () => { if (users>1) users--; update(); });
+
+    renderGrid(); update();
+  </script>
+</body>
+</html>
