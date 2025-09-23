@@ -1,150 +1,195 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Calcolatore Risparmio</title>
-  <style>
-    :root {
-      --bg:#000;
-      --card:#111;
-      --muted:#444;
-      --accent:#00cc44;
-      --accent-2:#ffc000;
-      --danger:#ff4444;
-      --text:#fff;
-    }
-    *{box-sizing:border-box}
-    body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,Arial,sans-serif;line-height:1.4}
-    h1{margin:0 0 24px;text-align:center;letter-spacing:.4px}
-    .wrap{max-width:1200px;margin:0 auto;padding:24px}
-    .layout{display:flex;gap:32px;align-items:flex-start}
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:16px;flex:1}
-    .card{background:var(--card);padding:16px;border-radius:12px;text-align:center;cursor:pointer;transition:.2s}
-    .card.active{outline:2px solid var(--accent)}
-    .card svg{width:40px;height:40px;display:block;margin:0 auto 8px}
-    .sidebar{width:300px;background:var(--card);padding:20px;border-radius:12px}
-    .sidebar h2{margin:0 0 12px;color:var(--accent-2)}
-    .sidebar p{margin:6px 0}
-    .btn{display:block;width:100%;padding:12px;margin-top:16px;background:var(--accent);color:#000;font-weight:bold;text-align:center;border-radius:8px;text-decoration:none}
-    button{background:var(--accent);border:none;color:#000;font-weight:bold;padding:6px 12px;margin:4px;cursor:pointer;border-radius:6px}
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Calcolatore Risparmio</title>
+<style>
+  :root{
+    --bg:#000; --card:#111; --muted:#777; --muted-2:#2a2a2a;
+    --accent:#00cc44; --accent-2:#ffc000; --danger:#ff4444; --text:#fff;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,Arial,sans-serif}
+  h1{margin:16px 0 8px;text-align:center;letter-spacing:.4px}
+  .wrap{max-width:1200px;margin:0 auto;padding:16px}
+  .layout{display:flex;gap:28px;align-items:flex-start}
+  /* GRID */
+  .grid{display:grid;grid-template-columns:repeat(6, minmax(120px,1fr));gap:12px;flex:1}
+  .card{
+    background:var(--card); border:1px solid var(--muted-2);
+    border-radius:14px; padding:12px; text-align:center; cursor:pointer;
+    transition:.2s; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:110px;
+  }
+  .card:hover{transform:translateY(-1px); border-color:#3a3a3a}
+  .card.active{outline:2px solid var(--accent)}
+  .card svg{width:36px;height:36px;margin-bottom:6px;display:block}
+  .card span{display:block; font-size:14px; line-height:1.15; word-wrap:break-word}
+  /* SIDEBAR */
+  .side{width:360px;background:var(--card);border:1px solid var(--muted-2);border-radius:14px;padding:18px;position:sticky;top:12px}
+  .side h3{margin:0 0 8px;color:var(--accent-2)}
+  .row{display:flex;align-items:center;gap:8px}
+  .pill{display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid #242424;background:#0e0e0e}
+  button{background:var(--accent);border:none;color:#000;font-weight:700;cursor:pointer;border-radius:8px;padding:6px 10px}
+  .muted{color:var(--muted)}
+  .ul{list-style:none;margin:6px 0 12px;padding:0;max-height:260px;overflow:auto}
+  .ul li{font-size:13px;margin:4px 0}
+  .danger{color:var(--danger);font-weight:800}
+  .green{color:var(--accent);font-weight:800}
+  .cta{display:block;text-align:center;background:var(--accent);color:#000;text-decoration:none;padding:12px;border-radius:10px;margin-top:14px;font-weight:800}
+  .small{font-size:12px}
+  @media (max-width: 1100px){ .grid{grid-template-columns:repeat(4,minmax(120px,1fr))} .side{width:100%;position:static} .layout{flex-direction:column} }
+  @media (max-width: 640px){ .grid{grid-template-columns:repeat(2,minmax(120px,1fr))} }
+</style>
 </head>
 <body>
   <div class="wrap">
     <h1>RISPARMIA DENARO E STRESS!</h1>
-    <div class="layout">
-      <!-- Griglia App -->
-      <div class="grid" id="apps">
-        <div class="card" data-name="Asana" data-price="20">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">
-            <circle cx="20" cy="12" r="6" fill="#ff6666"/>
-            <circle cx="10" cy="28" r="6" fill="#ff6666"/>
-            <circle cx="30" cy="28" r="6" fill="#ff6666"/>
-          </svg>
-          <span>Progetti</span>
-        </div>
-        <div class="card" data-name="Quickbooks" data-price="76">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">
-            <rect x="5" y="5" width="30" height="30" rx="6" fill="#00cc44"/>
-          </svg>
-          <span>Contabilità</span>
-        </div>
-        <div class="card" data-name="Shopify" data-price="79">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">
-            <polygon points="20,5 35,35 5,35" fill="#0c6"/>
-          </svg>
-          <span>E-commerce</span>
-        </div>
-        <div class="card" data-name="Salesforce" data-price="165">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">
-            <circle cx="20" cy="20" r="15" fill="#00aaff"/>
-          </svg>
-          <span>CRM</span>
-        </div>
-        <div class="card" data-name="Slack" data-price="14.1">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">
-            <rect x="8" y="8" width="8" height="24" fill="#e01e5a"/>
-            <rect x="16" y="8" width="8" height="8" fill="#36c5f0"/>
-            <rect x="24" y="8" width="8" height="24" fill="#2eb67d"/>
-            <rect x="16" y="24" width="8" height="8" fill="#ecb22e"/>
-          </svg>
-          <span>Comunicazioni</span>
-        </div>
-        <div class="card" data-name="Notion" data-price="14">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">
-            <rect x="6" y="6" width="28" height="28" fill="#fff" stroke="#000"/>
-            <text x="13" y="27" font-size="14" fill="#000" font-family="Arial">N</text>
-          </svg>
-          <span>Knowledge</span>
-        </div>
-        <div class="card" data-name="DocuSign" data-price="38">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">
-            <rect x="6" y="10" width="28" height="20" rx="2" fill="#ffcc00"/>
-          </svg>
-          <span>Firma</span>
-        </div>
-        <div class="card" data-name="WordPress" data-price="25">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">
-            <circle cx="20" cy="20" r="18" fill="#21759b"/>
-            <text x="12" y="25" font-size="12" fill="#fff" font-family="Arial">WP</text>
-          </svg>
-          <span>Sito web</span>
-        </div>
-      </div>
 
-      <!-- Sidebar calcolo -->
-      <div class="sidebar">
-        <h2>Calcolatore</h2>
-        <div id="summary"></div>
-        <p><b>Numero utenti</b></p>
-        <button onclick="updateUsers(-1)">-</button>
-        <span id="users">1</span> utente
-        <button onclick="updateUsers(1)">+</button>
-        <p id="saving"></p>
-        <a href="mailto:info@tuosito.it" class="btn">CONTATTACI</a>
-      </div>
+    <div class="layout">
+      <!-- GRID -->
+      <div id="grid" class="grid"></div>
+
+      <!-- SIDEBAR -->
+      <aside class="side">
+        <h3>Calcolatore</h3>
+
+        <div class="muted">App da sostituire</div>
+        <ul id="list" class="ul"></ul>
+        <div class="danger">Totale: <span id="totReplace">€ 0,00</span> <span class="muted">/anno</span></div>
+
+        <div class="muted" style="margin-top:12px">Tutte le app Odoo</div>
+        <div class="green" id="totOdoo">€ 0,00 <span class="muted">/anno</span></div>
+
+        <div style="margin:12px 0 8px"><b>Numero utenti</b></div>
+        <div class="row">
+          <button id="minus">−</button>
+          <div class="pill"><span id="users">1</span> utente</div>
+          <button id="plus">+</button>
+        </div>
+
+        <div style="margin-top:8px" class="green">Risparmio: <span id="saving">€ 0,00</span> <span class="muted">/anno</span></div>
+
+        <a href="#contatti" class="cta">CONTATTACI</a>
+
+        <p class="muted small" style="margin-top:10px">
+          * Alcune app includono costi variabili non calcolati (es. percentuali su ricavi o fee per ticket). Nel totale si considerano solo le componenti fisse e/o per utente indicate.
+        </p>
+      </aside>
     </div>
   </div>
 
 <script>
-const apps = document.querySelectorAll('.card');
-const summary = document.getElementById('summary');
-const saving = document.getElementById('saving');
-const usersEl = document.getElementById('users');
+/* ====== CONFIG ====== */
+const ODOO_EUR_YEAR_PER_USER = 142.80;   // €/utente/anno (fisso)
+const conversionRate = 0.93;             // $ -> € (solo sui totali)
 
+/* Icone semplici (SVG inline) */
+const icons = {
+  circle:(c)=>`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><circle cx="20" cy="20" r="16" fill="${c}"/></svg>`,
+  rect:(c)=>`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><rect x="6" y="6" width="28" height="28" rx="6" fill="${c}"/></svg>`,
+  tri:(c)=>`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><polygon points="20,6 34,34 6,34" fill="${c}"/></svg>`,
+  doc:(c)=>`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><rect x="10" y="6" width="20" height="28" fill="${c}"/></svg>`,
+  chip:(c)=>`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><rect x="6" y="10" width="28" height="20" rx="3" fill="${c}"/></svg>`,
+  ring:(c)=>`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><circle cx="20" cy="20" r="16" stroke="${c}" stroke-width="6" fill="none"/></svg>`,
+  dots:(c)=>`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><circle cx="20" cy="12" r="4" fill="${c}"/><circle cx="12" cy="26" r="4" fill="${c}"/><circle cx="28" cy="26" r="4" fill="${c}"/></svg>`,
+  cross:(c)=>`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><rect x="18" y="6" width="4" height="28" fill="${c}"/><rect x="6" y="18" width="28" height="4" fill="${c}"/></svg>`,
+  tag:(c)=>`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><polygon points="6,16 20,6 34,16 34,34 6,34" fill="${c}"/></svg>`
+};
+
+/* Dati app (dal tuo screenshot) 
+   Ogni app ha: nome visibile, source (brand di riferimento), baseUSD (mensile), perUserUSD (mensile), note opzionale
+*/
+const APPS = [
+  // Riga 1
+  {label:"Progetti",          source:"Asana",       baseUSD:0,    perUserUSD:20,    icon:icons.dots("#ff6b6b")},
+  {label:"Contabilità",       source:"Quickbooks",  baseUSD:0,    perUserUSD:76,    icon:icons.rect("#2ecc71")},
+  {label:"E-commerce",        source:"Shopify",     baseUSD:79,   perUserUSD:0,     note:"+ 1% ricavo", icon:icons.tri("#00c389")},
+  {label:"CRM",               source:"Salesforce",  baseUSD:0,    perUserUSD:165,   icon:icons.circle("#1da1f2")},
+  {label:"Comunicazioni",     source:"Slack",       baseUSD:0,    perUserUSD:14.10, icon:icons.ring("#9b59b6")},
+  {label:"Knowledge",         source:"Notion",      baseUSD:0,    perUserUSD:10,    icon:icons.rect("#ffffff")},
+  // Riga 2
+  {label:"Risorse umane",     source:"BambooHR",    baseUSD:99,   perUserUSD:10,    icon:icons.circle("#e74c3c")},
+  {label:"Firma",             source:"DocuSign",    baseUSD:0,    perUserUSD:38,    icon:icons.doc("#f1c40f")},
+  {label:"Magazzino",         source:"Inflow",      baseUSD:349,  perUserUSD:0,     icon:icons.rect("#16a085")},
+  {label:"Sito web",          source:"WordPress",   baseUSD:25,   perUserUSD:0,     icon:icons.circle("#21759b")},
+  {label:"Documenti",         source:"Sharepoint",  baseUSD:0,    perUserUSD:12.5,  icon:icons.doc("#3498db")},
+  {label:"Punto vendita",     source:"Lightspeed",  baseUSD:120,  perUserUSD:29,    icon:icons.tag("#8e44ad")},
+  // Riga 3
+  {label:"Note spese",        source:"Expensify",   baseUSD:0,    perUserUSD:9,     icon:icons.circle("#2ecc71")},
+  {label:"Appuntamenti",      source:"Calendly",    baseUSD:0,    perUserUSD:16,    icon:icons.ring("#1abc9c")},
+  {label:"Acquisti",          source:"Coupa",       baseUSD:2500, perUserUSD:0,     icon:icons.rect("#e67e22")},
+  {label:"Social",            source:"Hootsuite",   baseUSD:249,  perUserUSD:0,     icon:icons.circle("#00a4dc")},
+  {label:"Pianificazione",    source:"ClickUp",     baseUSD:0,    perUserUSD:12,    icon:icons.cross("#f39c12")},
+  {label:"Posta elettronica", source:"Hubspot",     baseUSD:0,    perUserUSD:90,    icon:icons.rect("#ff6f61")},
+  // Riga 4
+  {label:"Fogli ore",         source:"Harvest",     baseUSD:0,    perUserUSD:14,    icon:icons.rect("#f39c12")},
+  {label:"Helpdesk",          source:"Zendesk",     baseUSD:0,    perUserUSD:115,   icon:icons.rect("#27ae60")},
+  {label:"Eventi",            source:"Eventbrite",  baseUSD:0,    perUserUSD:0,     note:"+ $1.79 + 3.7% / ticket", icon:icons.circle("#e84393")},
+  {label:"MSP",               source:"KatanaMRP",   baseUSD:359,  perUserUSD:0,     icon:icons.tri("#95a5a6")},
+  {label:"Noleggi",           source:"Booqable",    baseUSD:79,   perUserUSD:20,    icon:icons.chip("#f1c40f")},
+];
+
+/* ====== RENDER GRID ====== */
+const grid = document.getElementById('grid');
+const listEl = document.getElementById('list');
+const usersEl = document.getElementById('users');
+const totReplaceEl = document.getElementById('totReplace');
+const totOdooEl = document.getElementById('totOdoo');
+const savingEl = document.getElementById('saving');
+
+let selected = new Set();
 let users = 1;
 
-apps.forEach(app=>{
-  app.addEventListener('click',()=>{
-    app.classList.toggle('active');
-    calc();
-  });
-});
+function euro(n){ return n.toLocaleString("it-IT",{style:"currency",currency:"EUR"}); }
+function usd(n){ return n.toLocaleString("en-US",{style:"currency",currency:"USD"}); }
 
-function updateUsers(n){
-  users=Math.max(1,users+n);
-  usersEl.textContent=users;
-  calc();
+function render(){
+  grid.innerHTML = "";
+  APPS.forEach((a,idx)=>{
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `${a.icon}<span>${a.label}</span>`;
+    card.addEventListener('click', ()=>{
+      if(selected.has(idx)) selected.delete(idx); else selected.add(idx);
+      card.classList.toggle('active');
+      calc();
+    });
+    grid.appendChild(card);
+  });
 }
 
 function calc(){
-  let total=0;
-  apps.forEach(app=>{
-    if(app.classList.contains('active')){
-      total += parseFloat(app.dataset.price)*users*12;
-    }
+  // lista
+  listEl.innerHTML = "";
+  let totalUSD_month = 0;
+  [...selected].forEach(i=>{
+    const a = APPS[i];
+    const monthly = a.baseUSD + a.perUserUSD*users;
+    totalUSD_month += monthly;
+    const li = document.createElement('li');
+    li.innerHTML = `${a.source} <span class="muted">(${a.label})</span>: ${usd(a.perUserUSD)} / utente` +
+                   (a.baseUSD? ` + base ${usd(a.baseUSD)}`:"") +
+                   (a.note? ` <span class="muted">(${a.note})</span>`:"");
+    listEl.appendChild(li);
   });
-  const odoo = 142.8*users;
-  const diff = total - odoo;
-  summary.innerHTML = `
-    <p>Totale app da sostituire: <b style="color:var(--danger)">€${total.toFixed(2)}/anno</b></p>
-    <p>Tutte le app Odoo: <b style="color:var(--accent)">€${odoo.toFixed(2)}/anno</b></p>
-  `;
-  saving.innerHTML = `Risparmio: <b style="color:var(--accent-2)">€${diff.toFixed(2)}/anno</b>`;
+
+  // totali
+  const totalEUR_year = totalUSD_month * 12 * conversionRate;
+  totReplaceEl.textContent = euro(totalEUR_year);
+
+  const odoo = ODOO_EUR_YEAR_PER_USER * users;
+  totOdooEl.textContent = euro(odoo) + " /anno";
+
+  const save = totalEUR_year - odoo;
+  savingEl.textContent = euro(save);
+  usersEl.textContent = users.toLocaleString("it-IT");
 }
 
-calc();
+document.getElementById('plus').addEventListener('click', ()=>{ users++; calc(); });
+document.getElementById('minus').addEventListener('click', ()=>{ if(users>1) users--; calc(); });
+
+render(); calc();
 </script>
 </body>
 </html>
