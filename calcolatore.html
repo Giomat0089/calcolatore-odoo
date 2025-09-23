@@ -2,198 +2,174 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Calcolatore Risparmio</title>
   <style>
-    body {
-      margin: 0;
-      background: #000;
-      color: #fff;
-      font-family: Arial, sans-serif;
+    :root{
+      --bg:#000; --card:#111; --border:#0f0; --accent:#ffc400; --accent-2:#00cc44; --muted:#999;
     }
-    h1 {
-      text-align: center;
-      margin: 20px 0;
-    }
-    .container {
-      display: flex;
-      justify-content: center;
-      gap: 40px;
-      padding: 20px;
-    }
-    .apps {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 15px;
-    }
-    .app {
-      background: #111;
-      border: 2px solid #0f0;
-      border-radius: 10px;
-      text-align: center;
-      padding: 10px;
-      cursor: pointer;
-      transition: transform 0.2s, border-color 0.2s;
-    }
-    .app img {
-      width: 50px;
-      height: 50px;
-      margin-bottom: 10px;
-    }
-    .app:hover {
-      transform: scale(1.05);
-      border-color: #00ffcc;
-    }
-    .app.active {
-      border-color: #ff0;
-    }
-    .sidebar {
-      background: #1a1a1a;
-      padding: 20px;
-      border-radius: 10px;
-      width: 300px;
-    }
-    .sidebar h2 {
-      color: #ffcc00;
-      margin-top: 0;
-    }
-    .totals {
-      margin: 15px 0;
-    }
-    .totals p {
-      margin: 5px 0;
-    }
-    .users {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin: 10px 0;
-    }
-    .users button {
-      background: #0f0;
-      border: none;
-      padding: 5px 10px;
-      font-size: 18px;
-      cursor: pointer;
-      border-radius: 5px;
-    }
-    .contact {
-      background: #00cc44;
-      padding: 12px;
-      text-align: center;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 15px;
-    }
-    .note {
-      font-size: 12px;
-      color: #aaa;
-      margin-top: 10px;
-    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:#fff;font-family:system-ui,Arial,sans-serif}
+    h1{margin:20px 0;text-align:center}
+
+    .wrap{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 320px;gap:24px;padding:16px}
+
+    .apps{display:grid;grid-template-columns:repeat(6,1fr);gap:14px}
+    .app{background:var(--card);border:2px solid var(--border);border-radius:12px;padding:12px;text-align:center;cursor:pointer;transition:.18s}
+    .app:hover{transform:translateY(-2px);border-color:var(--accent)}
+    .app.active{border-color:var(--accent);box-shadow:0 0 0 2px rgba(255,196,0,.15) inset}
+    .app img{width:44px;height:44px;margin-bottom:8px;display:block;margin-inline:auto}
+    .app .lbl{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+    .side{background:#101010;border-radius:12px;padding:18px;position:sticky;top:12px;height:fit-content}
+    .side h2{margin:0 0 8px;color:var(--accent)}
+    .meta{color:var(--muted);font-size:12px;margin-bottom:8px}
+
+    .users{display:flex;align-items:center;gap:10px;margin:10px 0 14px}
+    .users button{background:var(--accent-2);border:none;color:#000;font-weight:700;border-radius:8px;padding:6px 10px;cursor:pointer}
+    .users .count{min-width:72px;text-align:center}
+
+    .list{background:#0c0c0c;border-radius:10px;padding:10px;max-height:260px;overflow:auto;margin:8px 0 12px}
+    .row{display:flex;justify-content:space-between;gap:10px;padding:6px 4px;border-bottom:1px dashed #2a2a2a}
+    .row:last-child{border-bottom:none}
+    .name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .price{white-space:nowrap}
+
+    .tot{margin-top:10px;border-top:2px solid #2a2a2a;padding-top:10px}
+    .line{display:flex;justify-content:space-between;margin:6px 0}
+    .strong{font-weight:700}
+    .accent{color:#39d353}
+    .cta{display:block;margin-top:12px;background:var(--accent-2);color:#000;text-align:center;font-weight:700;border-radius:10px;padding:12px;text-decoration:none}
+    .note{color:#aaa;font-size:12px;margin-top:10px}
   </style>
 </head>
 <body>
   <h1>RISPARMIA DENARO E STRESS!</h1>
-  <div class="container">
-    <div class="apps">
-      <div class="app" data-name="Asana" data-price="240"><img src="img/asana.svg" alt="Asana"><div>Progetti</div></div>
-      <div class="app" data-name="Quickbooks" data-price="912"><img src="img/quickbooks.svg" alt="Quickbooks"><div>Contabilità</div></div>
-      <div class="app" data-name="Shopify" data-price="948"><img src="img/shopify.svg" alt="Shopify"><div>E-commerce</div></div>
-      <div class="app" data-name="Salesforce" data-price="1980"><img src="img/salesforce.svg" alt="Salesforce"><div>CRM</div></div>
-      <div class="app" data-name="Slack" data-price="1440"><img src="img/slack.svg" alt="Slack"><div>Comunicazioni</div></div>
-      <div class="app" data-name="Notion" data-price="180"><img src="img/notion.svg" alt="Notion"><div>Knowledge</div></div>
 
-      <div class="app" data-name="BambooHR" data-price="1188"><img src="img/bamboohr.svg" alt="BambooHR"><div>Risorse umane</div></div>
-      <div class="app" data-name="Docusign" data-price="420"><img src="img/docusign.svg" alt="Docusign"><div>Firma</div></div>
-      <div class="app" data-name="Inflow" data-price="349"><img src="img/inflow.svg" alt="Inflow"><div>Magazzino</div></div>
-      <div class="app" data-name="Wordpress" data-price="150"><img src="img/wordpress.svg" alt="Wordpress"><div>Sito web</div></div>
-      <div class="app" data-name="Sharepoint" data-price="150"><img src="img/sharepoint.svg" alt="Sharepoint"><div>Documenti</div></div>
-      <div class="app" data-name="Lightspeed" data-price="1788"><img src="img/lightspeed.svg" alt="Lightspeed"><div>Punto vendita</div></div>
+  <div class="wrap">
+    <!-- GRIGLIA APP -->
+    <div class="apps" id="apps">
+      <!-- data-label = testo mostrato nella lista a destra -->
+      <!-- data-multiply = true (default) = costo per utente/anno, false = costo fisso non moltiplicato -->
+      <div class="app" data-name="Asana"       data-price="240"  data-label="€ 20/mese/utente"         ><img src="img/asana.svg" alt=""><div class="lbl">Progetti</div></div>
+      <div class="app" data-name="QuickBooks"  data-price="912"  data-label="€ 76/mese/utente"         ><img src="img/quickbooks.svg" alt=""><div class="lbl">Contabilità</div></div>
+      <div class="app" data-name="Shopify"     data-price="948"  data-label="1% + € 79/mese"           ><img src="img/shopify.svg" alt=""><div class="lbl">E-commerce</div></div>
+      <div class="app" data-name="Salesforce"  data-price="1980" data-label="€ 165/mese/utente"        ><img src="img/salesforce.svg" alt=""><div class="lbl">CRM</div></div>
+      <div class="app" data-name="Slack"       data-price="169"  data-label="€ 14,10/mese/utente"      ><img src="img/slack.svg" alt=""><div class="lbl">Comunicazioni</div></div>
+      <div class="app" data-name="Notion"      data-price="180"  data-label="€ 15/mese/utente"         ><img src="img/notion.svg" alt=""><div class="lbl">Knowledge</div></div>
 
-      <div class="app" data-name="Expensify" data-price="108"><img src="img/expensify.svg" alt="Expensify"><div>Note spese</div></div>
-      <div class="app" data-name="Calendly" data-price="192"><img src="img/calendly.svg" alt="Calendly"><div>Appuntamenti</div></div>
-      <div class="app" data-name="Coupa" data-price="2500"><img src="img/coupa.svg" alt="Coupa"><div>Acquisti</div></div>
-      <div class="app" data-name="Hootsuite" data-price="249"><img src="img/hootsuite.svg" alt="Hootsuite"><div>Social</div></div>
-      <div class="app" data-name="Clickup" data-price="144"><img src="img/clickup.svg" alt="Clickup"><div>Pianificazione</div></div>
-      <div class="app" data-name="Google Workspace" data-price="240"><img src="img/googleworkspace.svg" alt="Google Workspace"><div>Posta elettronica</div></div>
+      <div class="app" data-name="BambooHR"    data-price="1188" data-label="€ 99/mese/utente"         ><img src="img/bamboohr.svg" alt=""><div class="lbl">Risorse umane</div></div>
+      <div class="app" data-name="DocuSign"    data-price="420"  data-label="€ 35/mese/utente"         ><img src="img/docusign.svg" alt=""><div class="lbl">Firma</div></div>
+      <div class="app" data-name="InFlow"      data-price="349"  data-label="€ 349/anno"               data-multiply="false"><img src="img/inflow.svg" alt=""><div class="lbl">Magazzino</div></div>
+      <div class="app" data-name="WordPress"   data-price="150"  data-label="€ 12,50/mese"             data-multiply="false"><img src="img/wordpress.svg" alt=""><div class="lbl">Sito web</div></div>
+      <div class="app" data-name="SharePoint"  data-price="150"  data-label="€ 12,50/mese/utente"      ><img src="img/sharepoint.svg" alt=""><div class="lbl">Documenti</div></div>
+      <div class="app" data-name="Lightspeed"  data-price="1788" data-label="€ 149/mese/utente"        ><img src="img/lightspeed.svg" alt=""><div class="lbl">Punto vendita</div></div>
 
-      <div class="app" data-name="Harvest" data-price="168"><img src="img/harvest.svg" alt="Harvest"><div>Fogli ore</div></div>
-      <div class="app" data-name="Zendesk" data-price="1380"><img src="img/zendesk.svg" alt="Zendesk"><div>Helpdesk</div></div>
-      <div class="app" data-name="Eventbrite" data-price="3500"><img src="img/eventbrite.svg" alt="Eventbrite"><div>Eventi</div></div>
-      <div class="app" data-name="Katanamrp" data-price="359"><img src="img/katanamrp.svg" alt="Katanamrp"><div>MSP</div></div>
-      <div class="app" data-name="Boogable" data-price="948"><img src="img/boogable.svg" alt="Boogable"><div>Noleggi</div></div>
+      <div class="app" data-name="Expensify"   data-price="192"  data-label="€ 16/mese/utente"         ><img src="img/expensify.svg" alt=""><div class="lbl">Note spese</div></div>
+      <div class="app" data-name="Calendly"    data-price="192"  data-label="€ 16/mese/utente"         ><img src="img/calendly.svg" alt=""><div class="lbl">Appuntamenti</div></div>
+      <div class="app" data-name="Coupa"       data-price="2500" data-label="€ 2.500/anno"             data-multiply="false"><img src="img/coupa.svg" alt=""><div class="lbl">Acquisti</div></div>
+      <div class="app" data-name="Hootsuite"   data-price="249"  data-label="€ 20,75/mese/utente"      ><img src="img/hootsuite.svg" alt=""><div class="lbl">Social</div></div>
+      <div class="app" data-name="ClickUp"     data-price="144"  data-label="€ 12/mese/utente"         ><img src="img/clickup.svg" alt=""><div class="lbl">Pianificazione</div></div>
+      <div class="app" data-name="Google WS"   data-price="240"  data-label="€ 20/mese/utente"         ><img src="img/googleworkspace.svg" alt=""><div class="lbl">Posta elettronica</div></div>
+
+      <div class="app" data-name="Harvest"     data-price="168"  data-label="€ 14/mese/utente"         ><img src="img/harvest.svg" alt=""><div class="lbl">Fogli ore</div></div>
+      <div class="app" data-name="Zendesk"     data-price="1380" data-label="€ 115/mese/utente"        ><img src="img/zendesk.svg" alt=""><div class="lbl">Helpdesk</div></div>
+      <div class="app" data-name="Eventbrite"  data-price="3500" data-label="€ 3.500/anno (stima)"     data-multiply="false"><img src="img/eventbrite.svg" alt=""><div class="lbl">Eventi</div></div>
+      <div class="app" data-name="Katana MRP"  data-price="359"  data-label="€ 359/anno"               data-multiply="false"><img src="img/katanamrp.svg" alt=""><div class="lbl">MSP</div></div>
+      <div class="app" data-name="Booqable"    data-price="948"  data-label="€ 79/mese"                data-multiply="false"><img src="img/booqable.svg" alt=""><div class="lbl">Noleggi</div></div>
     </div>
 
-    <div class="sidebar">
-      <h2>Calcolatore</h2>
-      <div class="totals">
-        <p><strong>Totale app da sostituire:</strong> <span id="total">0,00 €</span> /anno</p>
-        <p>Tutte le app Odoo: <span style="color:limegreen">142,80 €</span> /anno</p>
+    <!-- SIDEBAR -->
+    <aside class="side">
+      <h2>App da sostituire</h2>
+      <div class="meta">per <span id="uMeta">1 utente</span> &nbsp; /anno</div>
+
+      <div id="list" class="list"><div style="color:#777;font-size:13px">Nessuna app selezionata.</div></div>
+
+      <div class="tot">
+        <div class="line"><span>TOTALE</span><span id="total">0,00 €</span></div>
       </div>
+
+      <h2 style="margin-top:18px">Tutte le app Odoo</h2>
+      <div class="meta">per <span id="uMeta2">1 utente</span></div>
+      <div class="line"><span>TOTALE</span><span id="odoo">142,80 €</span></div>
+
+      <h2 style="margin-top:18px">Un risparmio di</h2>
+      <div class="line strong accent"><span></span><span id="save">0,00 € /anno</span></div>
+
+      <a class="cta" href="#">CONTATTACI</a>
+      <div class="note">* Alcune app hanno costi variabili (percentuali o fee per ticket). Nel totale conteggiamo solo le parti fisse o per utente indicate.</div>
+
       <div class="users">
-        <button onclick="changeUsers(-1)">-</button>
-        <span id="userCount">1 utente</span>
-        <button onclick="changeUsers(1)">+</button>
+        <button id="minus">−</button>
+        <div class="count" id="uCount">1 utente</div>
+        <button id="plus">+</button>
       </div>
-      <div class="totals">
-        <p><strong>Risparmio:</strong> <span id="savings">-142,80 €</span> /anno</p>
-      </div>
-      <div class="contact">CONTATTACI</div>
-      <div class="note">* Alcune app includono costi variabili non calcolati (es. percentuali su ricavi o fee per ticket). Nel totale si considerano solo le componenti fisse e/o per utente indicate.</div>
-    </div>
+    </aside>
   </div>
 
   <script>
-    const apps = document.querySelectorAll('.app');
+    const fmt = v => v.toLocaleString('it-IT',{minimumFractionDigits:2, maximumFractionDigits:2});
+    const apps = [...document.querySelectorAll('.app')];
+    const list = document.getElementById('list');
     const totalEl = document.getElementById('total');
-    const savingsEl = document.getElementById('savings');
-    const userCountEl = document.getElementById('userCount');
-    let selectedTotal = 0;
-    let userCount = 1;
-    const odooPrice = 142.80;
+    const saveEl  = document.getElementById('save');
+    const odooEl  = document.getElementById('odoo');
+    const uMeta   = document.getElementById('uMeta');
+    const uMeta2  = document.getElementById('uMeta2');
+    const uCount  = document.getElementById('uCount');
+    const minus   = document.getElementById('minus');
+    const plus    = document.getElementById('plus');
 
-    function formatNumber(num) {
-      return num.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    let users = 1;
+    const ODOO_PER_USER = 142.80; // €/anno per utente
+
+    function calc(){
+      // costruisci lista e totale
+      let rows = [];
+      let total = 0;
+
+      apps.forEach(a=>{
+        if(!a.classList.contains('active')) return;
+        const name = a.dataset.name || 'App';
+        const price = parseFloat(a.dataset.price||'0');
+        const multiply = (a.dataset.multiply!=='false'); // default: per utente
+        const label = a.dataset.label || (multiply ? `€ ${fmt(price)} / utente / anno` : `€ ${fmt(price)} / anno`);
+
+        const rowPrice = multiply ? price*users : price;
+        total += rowPrice;
+
+        rows.push(`<div class="row"><div class="name">${name} <span style="color:#888">— ${label}</span></div><div class="price">€ ${fmt(rowPrice)}</div></div>`);
+      });
+
+      list.innerHTML = rows.length ? rows.join('') : '<div style="color:#777;font-size:13px">Nessuna app selezionata.</div>';
+
+      totalEl.textContent = `${fmt(total)} €`;
+      const odooTotal = ODOO_PER_USER * users;
+      odooEl.textContent = `${fmt(odooTotal)} €`;
+
+      // risparmio mai negativo (come Odoo quando non selezioni nulla)
+      const saving = Math.max(0, total - odooTotal);
+      saveEl.textContent = `${fmt(saving)} € /anno`;
+
+      uMeta.textContent  = users + (users===1?' utente':' utenti');
+      uMeta2.textContent = users + (users===1?' utente':' utenti');
+      uCount.textContent = users + (users===1?' utente':' utenti');
     }
 
-    apps.forEach(app => {
-      app.addEventListener('click', () => {
-        const price = parseFloat(app.dataset.price);
-        if (app.classList.contains('active')) {
-          app.classList.remove('active');
-          selectedTotal -= price * userCount;
-        } else {
-          app.classList.add('active');
-          selectedTotal += price * userCount;
-        }
-        updateTotals();
+    // interazioni
+    apps.forEach(a=>{
+      a.addEventListener('click',()=>{
+        a.classList.toggle('active');
+        calc();
       });
     });
 
-    function changeUsers(change) {
-      if (userCount + change < 1) return;
-      userCount += change;
-      userCountEl.textContent = userCount + (userCount === 1 ? ' utente' : ' utenti');
-      recalculate();
-    }
+    minus.addEventListener('click',()=>{ if(users>1){ users--; calc(); } });
+    plus.addEventListener('click',()=>{ users++; calc(); });
 
-    function recalculate() {
-      selectedTotal = 0;
-      apps.forEach(app => {
-        if (app.classList.contains('active')) {
-          const price = parseFloat(app.dataset.price);
-          selectedTotal += price * userCount;
-        }
-      });
-      updateTotals();
-    }
-
-    function updateTotals() {
-      totalEl.textContent = formatNumber(selectedTotal) + ' €';
-      const savings = selectedTotal - odooPrice * userCount;
-      savingsEl.textContent = formatNumber(savings) + ' €';
-    }
+    // iniziale: tutto a zero
+    calc();
   </script>
 </body>
 </html>
