@@ -1,135 +1,300 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Calcolatore Risparmio</title>
-<style>
-  :root{
-    --bg:#000; --card:#111; --muted:#777; --muted-2:#2a2a2a;
-    --accent:#00cc44; --accent-2:#ffc000; --danger:#ff4444; --text:#fff;
-  }
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,Arial,sans-serif}
-  h1{margin:16px 0 8px;text-align:center;letter-spacing:.4px}
-  .wrap{max-width:1200px;margin:0 auto;padding:16px}
-  .layout{display:flex;gap:28px;align-items:flex-start}
-  .grid{display:grid;grid-template-columns:repeat(6, minmax(120px,1fr));gap:12px;flex:1}
-  .card{background:var(--card);border:1px solid var(--muted-2);border-radius:14px;padding:12px;text-align:center;cursor:pointer;transition:.2s;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:110px}
-  .card:hover{transform:translateY(-1px);border-color:#3a3a3a}
-  .card.active{outline:2px solid var(--accent)}
-  .card img{width:36px;height:36px;margin-bottom:6px;display:block}
-  .card span{display:block;font-size:14px;line-height:1.15;word-wrap:break-word}
-  .side{width:360px;background:var(--card);border:1px solid var(--muted-2);border-radius:14px;padding:18px;position:sticky;top:12px}
-  .side h3{margin:0 0 8px;color:var(--accent-2)}
-  .row{display:flex;align-items:center;gap:8px}
-  .pill{display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid #242424;background:#0e0e0e}
-  button{background:var(--accent);border:none;color:#000;font-weight:700;cursor:pointer;border-radius:8px;padding:6px 10px}
-  .muted{color:var(--muted)}
-  .ul{list-style:none;margin:6px 0 12px;padding:0;max-height:260px;overflow:auto}
-  .ul li{font-size:13px;margin:4px 0}
-  .danger{color:var(--danger);font-weight:800}
-  .green{color:var(--accent);font-weight:800}
-  .cta{display:block;text-align:center;background:var(--accent);color:#000;text-decoration:none;padding:12px;border-radius:10px;margin-top:14px;font-weight:800}
-  .small{font-size:12px}
-  @media (max-width: 1100px){.grid{grid-template-columns:repeat(4,minmax(120px,1fr))}.side{width:100%;position:static}.layout{flex-direction:column}}
-  @media (max-width: 640px){.grid{grid-template-columns:repeat(2,minmax(120px,1fr))}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calcolatore Risparmio</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #000;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      margin: 20px 0;
+    }
+
+    .wrap {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      max-width: 1200px;
+    }
+
+    .apps {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 15px;
+      flex: 2;
+    }
+
+    .app {
+      background: #111;
+      border: 2px solid #00cc44;
+      border-radius: 8px;
+      padding: 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s, border 0.2s;
+    }
+
+    .app img {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 8px;
+    }
+
+    .app:hover {
+      transform: scale(1.05);
+      border-color: #ffc400;
+    }
+
+    .app.active {
+      border-color: #ffc400;
+    }
+
+    .calculator {
+      background: #111;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 280px;
+      flex: 1;
+    }
+
+    .calculator h2 {
+      color: #ffc400;
+      margin-top: 0;
+    }
+
+    .totals {
+      margin: 15px 0;
+    }
+
+    .totals p {
+      margin: 5px 0;
+    }
+
+    .danger {
+      color: #ff4444;
+      font-weight: bold;
+    }
+
+    .success {
+      color: #00cc44;
+      font-weight: bold;
+    }
+
+    .users {
+      display: flex;
+      align-items: center;
+      margin: 15px 0;
+    }
+
+    .users button {
+      background: #00cc44;
+      border: none;
+      color: #000;
+      font-size: 16px;
+      padding: 5px 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    .users span {
+      margin: 0 10px;
+    }
+
+    .cta {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      text-align: center;
+      background: #00cc44;
+      color: #000;
+      font-weight: bold;
+      text-decoration: none;
+      border-radius: 6px;
+      margin-top: 20px;
+    }
+
+    .note {
+      margin-top: 10px;
+      font-size: 12px;
+      color: #aaa;
+    }
+  </style>
 </head>
 <body>
-<div class="wrap">
   <h1>RISPARMIA DENARO E STRESS!</h1>
-  <div class="layout">
-    <!-- GRID -->
-    <div id="grid" class="grid">
-      <div class="card" data-name="Asana" data-price="20">
-        <img src="img/asana.svg" alt="Asana logo">
-        <span>Progetti</span>
+  <div class="wrap">
+    <!-- App icons -->
+    <div class="apps">
+      <div class="app" data-price="240">
+        <img src="img/asana.svg" alt="Asana">
+        <p>Progetti</p>
       </div>
-      <div class="card" data-name="Quickbooks" data-price="76">
-        <img src="img/quickbooks.svg" alt="QuickBooks logo">
-        <span>Contabilità</span>
+      <div class="app" data-price="912">
+        <img src="img/quickbooks.svg" alt="QuickBooks">
+        <p>Contabilità</p>
       </div>
-      <div class="card" data-name="Shopify" data-price="79">
-        <img src="img/shopify.svg" alt="Shopify logo">
-        <span>E-commerce</span>
+      <div class="app" data-price="79">
+        <img src="img/shopify.svg" alt="Shopify">
+        <p>E-commerce</p>
       </div>
-      <div class="card" data-name="Salesforce" data-price="165">
-        <img src="img/salesforce.svg" alt="Salesforce logo">
-        <span>CRM</span>
+      <div class="app" data-price="1980">
+        <img src="img/salesforce.svg" alt="Salesforce">
+        <p>CRM</p>
       </div>
-      <div class="card" data-name="Slack" data-price="14.1">
-        <img src="img/slack.svg" alt="Slack logo">
-        <span>Comunicazioni</span>
+      <div class="app" data-price="144">
+        <img src="img/slack.svg" alt="Slack">
+        <p>Comunicazioni</p>
       </div>
-      <!-- Le altre card ancora senza logo -->
-      <div class="card" data-name="Notion" data-price="10"><span>Knowledge</span></div>
-      <div class="card" data-name="BambooHR" data-price="10" data-base="99"><span>Risorse umane</span></div>
-      <div class="card" data-name="DocuSign" data-price="38"><span>Firma</span></div>
-      <div class="card" data-name="Inflow" data-price="0" data-base="349"><span>Magazzino</span></div>
-      <div class="card" data-name="WordPress" data-price="0" data-base="25"><span>Sito web</span></div>
-      <!-- ... continua con tutte le altre app -->
+      <div class="app" data-price="0">
+        <img src="img/notion.svg" alt="Notion">
+        <p>Knowledge</p>
+      </div>
+      <div class="app" data-price="1188">
+        <img src="img/bamboohr.svg" alt="BambooHR">
+        <p>Risorse umane</p>
+      </div>
+      <div class="app" data-price="456">
+        <img src="img/docusign.svg" alt="DocuSign">
+        <p>Firma</p>
+      </div>
+      <div class="app" data-price="349">
+        <img src="img/inflow.svg" alt="Inflow">
+        <p>Magazzino</p>
+      </div>
+      <div class="app" data-price="300">
+        <img src="img/wordpress.svg" alt="WordPress">
+        <p>Sito web</p>
+      </div>
+      <div class="app" data-price="150">
+        <img src="img/sharepoint.svg" alt="Sharepoint">
+        <p>Documenti</p>
+      </div>
+      <div class="app" data-price="708">
+        <img src="img/lightspeed.svg" alt="Lightspeed">
+        <p>Punto vendita</p>
+      </div>
+      <div class="app" data-price="192">
+        <img src="img/expensify.svg" alt="Expensify">
+        <p>Note spese</p>
+      </div>
+      <div class="app" data-price="108">
+        <img src="img/calendly.svg" alt="Calendly">
+        <p>Appuntamenti</p>
+      </div>
+      <div class="app" data-price="2500">
+        <img src="img/coupa.svg" alt="Coupa">
+        <p>Acquisti</p>
+      </div>
+      <div class="app" data-price="249">
+        <img src="img/hotelsuite.svg" alt="Hotelsuite">
+        <p>Social</p>
+      </div>
+      <div class="app" data-price="144">
+        <img src="img/clickup.svg" alt="Clickup">
+        <p>Pianificazione</p>
+      </div>
+      <div class="app" data-price="576">
+        <img src="img/hubspot.svg" alt="Hubspot">
+        <p>Posta elettronica</p>
+      </div>
+      <div class="app" data-price="168">
+        <img src="img/harvest.svg" alt="Harvest">
+        <p>Fogli ore</p>
+      </div>
+      <div class="app" data-price="1380">
+        <img src="img/zendesk.svg" alt="Zendesk">
+        <p>Helpdesk</p>
+      </div>
+      <div class="app" data-price="0">
+        <img src="img/eventbrite.svg" alt="Eventbrite">
+        <p>Eventi</p>
+      </div>
+      <div class="app" data-price="359">
+        <img src="img/kanban.svg" alt="Kanban">
+        <p>MSP</p>
+      </div>
+      <div class="app" data-price="948">
+        <img src="img/booqable.svg" alt="Booqable">
+        <p>Noleggi</p>
+      </div>
     </div>
 
-    <!-- SIDEBAR -->
-    <aside class="side">
-      <h3>Calcolatore</h3>
-      <div class="muted">App da sostituire</div>
-      <ul id="list" class="ul"></ul>
-      <div class="danger">Totale: <span id="totReplace">€ 0,00</span> <span class="muted">/anno</span></div>
-      <div class="muted" style="margin-top:12px">Tutte le app Odoo</div>
-      <div class="green" id="totOdoo">€ 0,00 <span class="muted">/anno</span></div>
-      <div style="margin:12px 0 8px"><b>Numero utenti</b></div>
-      <div class="row">
-        <button id="minus">−</button>
-        <div class="pill"><span id="users">1</span> utente</div>
-        <button id="plus">+</button>
+    <!-- Calculator -->
+    <div class="calculator">
+      <h2>Calcolatore</h2>
+      <div class="totals">
+        <p>Totale app da sostituire: <span id="selectedTotal" class="danger">0,00 € /anno</span></p>
+        <p>Tutte le app Odoo: <span class="success">142,80 € /anno</span></p>
       </div>
-      <div style="margin-top:8px" class="green">Risparmio: <span id="saving">€ 0,00</span> <span class="muted">/anno</span></div>
-      <a href="#contatti" class="cta">CONTATTACI</a>
-    </aside>
+      <div class="users">
+        <button id="decrease">-</button>
+        <span><span id="userCount">1</span> utente</span>
+        <button id="increase">+</button>
+      </div>
+      <p>Risparmio: <span id="savings" class="success">-142,80 € /anno</span></p>
+      <a href="#" class="cta">CONTATTACI</a>
+      <p class="note">* Alcune app includono costi variabili non calcolati (es. percentuali su ricavi o fee per ticket). Nel totale si considerano solo le componenti fisse e/o per utente indicate.</p>
+    </div>
   </div>
-</div>
 
-<script>
-const conversionRate = 0.93;  
-const ODOO_EUR_YEAR_PER_USER = 142.80;
-let users = 1;
+  <script>
+    const apps = document.querySelectorAll('.app');
+    const selectedTotalEl = document.getElementById('selectedTotal');
+    const savingsEl = document.getElementById('savings');
+    const userCountEl = document.getElementById('userCount');
+    const decreaseBtn = document.getElementById('decrease');
+    const increaseBtn = document.getElementById('increase');
 
-const totReplaceEl = document.getElementById('totReplace');
-const totOdooEl = document.getElementById('totOdoo');
-const savingEl = document.getElementById('saving');
-const listEl = document.getElementById('list');
-const usersEl = document.getElementById('users');
-const apps = document.querySelectorAll('.card');
+    let selectedTotal = 0;
+    let userCount = 1;
+    const odooTotal = 142.80;
 
-function euro(n){ return n.toLocaleString("it-IT",{style:"currency",currency:"EUR"}); }
-
-function calc(){
-  let totalUSD_month = 0;
-  listEl.innerHTML="";
-  apps.forEach(app=>{
-    if(app.classList.contains('active')){
-      const price = parseFloat(app.dataset.price)||0;
-      const base = parseFloat(app.dataset.base)||0;
-      const monthly = base + price*users;
-      totalUSD_month += monthly;
-      const li=document.createElement('li');
-      li.textContent = app.dataset.name + ": $" + monthly.toFixed(2) + "/mese";
-      listEl.appendChild(li);
+    function updateTotals() {
+      const total = selectedTotal * userCount;
+      const savings = total - (odooTotal * userCount);
+      selectedTotalEl.textContent = total.toLocaleString('it-IT', { style: 'currency', currency: 'EUR' }) + ' /anno';
+      savingsEl.textContent = savings.toLocaleString('it-IT', { style: 'currency', currency: 'EUR' }) + ' /anno';
     }
-  });
-  const totalEUR_year = totalUSD_month*12*conversionRate;
-  totReplaceEl.textContent = euro(totalEUR_year);
-  const odoo = ODOO_EUR_YEAR_PER_USER*users;
-  totOdooEl.textContent = euro(odoo)+" /anno";
-  savingEl.textContent = euro(totalEUR_year-odoo);
-  usersEl.textContent = users.toLocaleString("it-IT");
-}
-apps.forEach(app=>app.addEventListener('click',()=>{app.classList.toggle('active');calc();}));
-document.getElementById('plus').onclick=()=>{users++;calc();};
-document.getElementById('minus').onclick=()=>{if(users>1)users--;calc();};
-calc();
-</script>
+
+    apps.forEach(app => {
+      app.addEventListener('click', () => {
+        app.classList.toggle('active');
+        const price = parseFloat(app.dataset.price);
+        if (app.classList.contains('active')) {
+          selectedTotal += price;
+        } else {
+          selectedTotal -= price;
+        }
+        updateTotals();
+      });
+    });
+
+    decreaseBtn.addEventListener('click', () => {
+      if (userCount > 1) {
+        userCount--;
+        userCountEl.textContent = userCount;
+        updateTotals();
+      }
+    });
+
+    increaseBtn.addEventListener('click', () => {
+      userCount++;
+      userCountEl.textContent = userCount;
+      updateTotals();
+    });
+
+    updateTotals();
+  </script>
 </body>
 </html>
