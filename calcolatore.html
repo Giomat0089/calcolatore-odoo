@@ -17,26 +17,30 @@
     .apps{display:grid;grid-template-columns:repeat(6,1fr);gap:14px}
     .app{
       background:var(--card);
-      border:2px solid var(--border); /* verde di base */
+      border:2px solid var(--border); /* verde base */
       border-radius:12px;
       padding:12px;
       text-align:center;
       cursor:pointer;
-      transition:border-color .18s; /* transizione solo sul colore */
+      transition:border-color .18s;
       width:100%;
       max-width:100%;
-      min-height:120px; /* altezza uniforme */
+      height:140px;            /* altezza fissa */
+      display:flex;            /* centratura contenuti */
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
       box-sizing:border-box;
     }
     .app:hover {
-      border-color:var(--border); /* resta verde anche al passaggio del mouse */
-      transform:none; /* niente spostamento */
+      border-color:var(--border); /* resta verde anche al passaggio mouse */
+      transform:none;
     }
     .app.active {
       border-color:var(--accent); /* giallo/arancio quando attivo */
-      box-shadow:none; /* niente glow, dimensioni fisse */
+      box-shadow:none;
     }
-    .app img{width:44px;height:44px;margin-bottom:8px;display:block;margin-inline:auto}
+    .app img{width:44px;height:44px;margin-bottom:8px;display:block}
     .app .lbl{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
     .side{background:#101010;border-radius:12px;padding:18px;position:sticky;top:12px;height:fit-content}
@@ -57,7 +61,7 @@
     .line{display:flex;justify-content:space-between;margin:6px 0}
     .strong{font-weight:700}
     .accent{color:#39d353}
-    .cta{display:block;margin-top:12px;background:var(--accent-2);color:#000;text-align:center;font-weight:700;border-radius:10px;padding:12px;text-decoration:none}
+    .cta{display:block;margin-top:12px;background:#25d366;color:#fff;text-align:center;font-weight:700;border-radius:10px;padding:12px;text-decoration:none}
     .note{color:#aaa;font-size:12px;margin-top:10px}
 
     /* --- RESPONSIVE --- */
@@ -134,7 +138,11 @@
       <h2 style="margin-top:18px">Un risparmio di</h2>
       <div class="line strong accent"><span></span><span id="save">0,00 € /anno</span></div>
 
-      <a class="cta" href="#">CONTATTACI</a>
+      <!-- Bottone WhatsApp -->
+      <a class="cta" href="https://wa.me/393517247269?text=Ciao!+Ho+visto+il+calcolatore+e+voglio+più+informazioni" target="_blank">
+        CONTATTACI SU WHATSAPP
+      </a>
+
       <div class="note">* Alcune app hanno costi variabili (percentuali o fee per ticket). Nel totale conteggiamo solo le parti fisse o per utente indicate.</div>
 
       <div class="users">
