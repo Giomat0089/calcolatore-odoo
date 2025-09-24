@@ -41,6 +41,27 @@
     .accent{color:#39d353}
     .cta{display:block;margin-top:12px;background:var(--accent-2);color:#000;text-align:center;font-weight:700;border-radius:10px;padding:12px;text-decoration:none}
     .note{color:#aaa;font-size:12px;margin-top:10px}
+
+    /* --- RESPONSIVE --- */
+    @media (max-width: 1024px) {
+      .apps {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .wrap {
+        grid-template-columns: 1fr;
+      }
+      .apps {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .side {
+        position: relative;
+        top: auto;
+        margin-top: 20px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -49,8 +70,6 @@
   <div class="wrap">
     <!-- GRIGLIA APP -->
     <div class="apps" id="apps">
-      <!-- data-label = testo mostrato nella lista a destra -->
-      <!-- data-multiply = true (default) = costo per utente/anno, false = costo fisso non moltiplicato -->
       <div class="app" data-name="Asana"       data-price="240"  data-label="€ 20/mese/utente"         ><img src="img/asana.svg" alt=""><div class="lbl">Progetti</div></div>
       <div class="app" data-name="QuickBooks"  data-price="912"  data-label="€ 76/mese/utente"         ><img src="img/quickbooks.svg" alt=""><div class="lbl">Contabilità</div></div>
       <div class="app" data-name="Shopify"     data-price="948"  data-label="1% + € 79/mese"           ><img src="img/shopify.svg" alt=""><div class="lbl">E-commerce</div></div>
@@ -92,7 +111,7 @@
 
       <h2 style="margin-top:18px">Tutte le app con GioGioDigital</h2>
       <div class="meta">per <span id="uMeta2">1 utente</span></div>
-      <div class="line"><span>TOTALE</span><span id="odoo">142,80 €</span></div>
+      <div class="line"><span>TOTALE</span><span id="">142,80 €</span></div>
 
       <h2 style="margin-top:18px">Un risparmio di</h2>
       <div class="line strong accent"><span></span><span id="save">0,00 € /anno</span></div>
@@ -114,7 +133,7 @@
     const list = document.getElementById('list');
     const totalEl = document.getElementById('total');
     const saveEl  = document.getElementById('save');
-    const odooEl  = document.getElementById('odoo');
+    const El  = document.getElementById('');
     const uMeta   = document.getElementById('uMeta');
     const uMeta2  = document.getElementById('uMeta2');
     const uCount  = document.getElementById('uCount');
