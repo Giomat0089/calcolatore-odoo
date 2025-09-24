@@ -22,12 +22,20 @@
       padding:12px;
       text-align:center;
       cursor:pointer;
-      transition:.18s;
+      transition:transform .18s, border-color .18s, box-shadow .18s;
       width:100%;
       max-width:100%;
+      min-height:120px; /* altezza uniforme */
+      box-sizing:border-box;
     }
-    .app:hover{transform:translateY(-2px);border-color:var(--accent)}
-    .app.active{border-color:var(--accent);box-shadow:inset 0 0 0 2px rgba(255,196,0,.15)}
+    .app:hover {
+      transform:translateY(-2px);
+      border-color:#555; /* hover sobrio */
+    }
+    .app.active {
+      border-color:var(--accent); /* giallo quando attivo */
+      box-shadow:inset 0 0 8px rgba(255,196,0,.25); /* glow interno */
+    }
     .app img{width:44px;height:44px;margin-bottom:8px;display:block;margin-inline:auto}
     .app .lbl{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
@@ -183,7 +191,7 @@
       const odooTotal = ODOO_PER_USER * users;
       odooEl.textContent = `${fmt(odooTotal)} €`;
 
-      // risparmio mai negativo (come Odoo quando non selezioni nulla)
+      // risparmio mai negativo
       const saving = Math.max(0, total - odooTotal);
       saveEl.textContent = `${fmt(saving)} € /anno`;
 
